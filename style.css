@@ -50,5 +50,7 @@ button i.fa {
   border: 1px solid #ccc;
   padding: 10px;
   width: 400px;
+  display: none; /* add this line */
 }
+
 
