@@ -37,7 +37,8 @@ function submitQuestion(question) {
 
 function getAnswer(question) {
   processingMsg.classList.add("hidden");
-  answer.classList.remove("hidden");
+  answerBox.style.display = "block"; // add this line
   answer.innerHTML = "The answer to your question is..."; // replace with API call to get the answer
 }
+
 
