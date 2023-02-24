@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html>
-   <body>
-      <head>
-         <title>Simple ASP Website Example</title>
-      </head>
-      <form>
-         Your question:<br> <input type="text" name="Q">
-         <br>
-         Answer:<br> <input type="text" name="A">
- 
-      </form>
-   </body>
-</html>
+<div class="container">
+  <h1>Ask a Question</h1>
+  <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
+  <input type="text" id="text-input" placeholder="Type your question...">
+  <p id="processing-msg" class="hidden">Processing your question...</p>
+  <p id="answer" class="hidden"></p>
+</div>
