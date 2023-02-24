@@ -72,37 +72,6 @@ var isClose=true;
         all_predicates.push('speak spanish'); // extra terms
         a = FuzzySet(all_predicates);
 
-        var synth = window.speechSynthesis;
-        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-        var recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
-        let dis = 1000;
-        let editstate = false;
-        $(document).keypress(function (e) {
-            if (e.which == 13&&!editstate) {
-                currentState = currentState(dis,30,true);
-            }
-            console.log(e.which)
-            if (e.which == 116&&!editstate) {
-                editstate = true;
-                bootbox.prompt({
-                    title: "Answer Set Programming Code",
-                    inputType: 'textarea',
-                    value:editor,
-                    callback: function (result) {
-                        editor = result||editor;
-                        editstate = false;
-                    }
-                });
-            }
-
-        });
-
-
-
 const voiceInputBtn = document.getElementById("voice-input-btn");
 const textInput = document.getElementById("text-input");
 const processingMsg = document.getElementById("processing-msg");
@@ -124,6 +93,7 @@ recognition.onresult = (event) => {
   const transcript = event.results[0][0].transcript;
   textInput.value = transcript;
   submitQuestion(transcript);
+  var result = a.get(transcript.join(" "), null, 0.5);
   
    if (result!=null) {
                 var mainkey = result[0][1].replace('speak ','');
