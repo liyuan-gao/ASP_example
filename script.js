@@ -40,3 +40,4 @@ function getAnswer(question) {
   answer.classList.remove("hidden");
   answer.innerHTML = "The answer to your question is..."; // replace with API call to get the answer
 }
+
