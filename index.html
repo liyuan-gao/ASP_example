@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>Simple ASP Website</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" href="style.css">
@@ -9,23 +10,45 @@
     <script src="libs/fuzzyset.js"></script>
   </head>
   <body>
-    
-    <div class="container">
-  <h1>Ask a Question</h1>
-  <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
-  <input type="text" id="text-input" placeholder="Type your question...">
-  <p id="processing-msg" class="hidden">Processing your question...</p>
-  <div id="answer-box" class="hidden">
-    <h2>Answer:</h2>
-    <p id="answer"></p>
-  </div>
-  </div>
+    <h1>Ask a question or say something...</h1>
+    <p id="userText"></p>
+    <p id="botText"></p>
+    <script>
+      window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      const userText = document.getElementById('userText');
+      const botText = document.getElementById('botText');
 
+      recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        userText.textContent = speechToText;
+        // You can call a backend API to get the answer and show it in the botText element
+        // Here's an example code to send a request to a backend API and display the response
+        fetch('https://api.example.com/answer?q=' + encodeURIComponent(speechToText))
+          .then(response => response.json())
+          .then(data => {
+            botText.textContent = data.answer;
+          })
+          .catch(error => {
+            botText.textContent = 'Sorry, something went wrong.';
+          });
+      };
 
-    <script src="script.js"></script>
+      recognition.onerror = (event) => {
+        botText.textContent = 'Sorry, something went wrong.';
+      };
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === ' ') {
+          recognition.start();
+        }
+      });
+    </script>
   </body>
 </html>
-
 
 
 
