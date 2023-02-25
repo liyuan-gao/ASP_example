@@ -7,6 +7,28 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+      #voice-input-btn {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+
+      #answer-box {
+        border: 1px solid black;
+        padding: 10px;
+        margin-top: 10px;
+      }
+    </style>
   </head>
   <body>
     <h1>Ask a Question</h1>
@@ -15,7 +37,7 @@
     <input type="text" id="text-input" placeholder="Type your question...">
     <button id="submit-btn">Submit</button>
     <div id="answer-box"></div>
-  
+
     <script>
       // Speech recognition API
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -29,35 +51,24 @@
       const submitBtn = document.getElementById('submit-btn');
       const answerBox = document.getElementById('answer-box');
 
-      // Handle speech recognition
-      recognition.onresult = event => {
-        const resultIndex = event.resultIndex;
-        const transcript = event.results[resultIndex][0].transcript;
-        textInput.value = transcript;
-      };
-
-      // Handle click on voice input button
-      voiceBtn.addEventListener('click', () => {
-        recognition.start();
-      });
-
       submitBtn.addEventListener('click', () => {
         const question = textInput.value;
         if (question.trim() === '') {
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
-        
-        // Evaluate math expressions
-        if (/^[0-9+\-*/\s()]+$/.test(question)) {
-          try {
-            const answer = eval(question);
-            answerBox.innerHTML = answer;
-          } catch {
-            answerBox.innerHTML = 'Sorry, something went wrong.';
-          }
-          return;
-        }
+
+        // Handle speech recognition
+        recognition.onresult = event => {
+          const resultIndex = event.resultIndex;
+          const transcript = event.results[resultIndex][0].transcript;
+          textInput.value = transcript;
+        };
+
+        // Handle click on voice input button
+        voiceBtn.addEventListener('click', () => {
+          recognition.start();
+        });
 
         // Call API to get answer
         const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
@@ -65,10 +76,7 @@
           .then(response => response.json())
           .then(data => {
             const answer = data.Answer || data.AbstractText || 'Sorry, I could not find an answer.';
-            const answerDiv = document.createElement('div');
-            answerDiv.innerHTML = answer;
-            answerBox.innerHTML = '';
-            answerBox.appendChild(answerDiv);
+            answerBox.innerHTML = answer;
           })
           .catch(() => {
             answerBox.innerHTML = 'Sorry, something went wrong.';
