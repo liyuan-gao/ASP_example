@@ -54,22 +54,8 @@
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
-    
-    // Handle speech recognition
-    recognition.onresult = event => {
-      const resultIndex = event.resultIndex;
-      const transcript = event.results[resultIndex][0].transcript;
-      textInput.value = transcript;
-    };
-
-    
-    // Handle click on voice input button
-    voiceBtn.addEventListener('click', () => {
-      recognition.start();
-    });
-
       
-      // Call API to get answer
+        // Call API to get answer
         const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
         fetch(url)
           .then(response => response.json())
@@ -83,7 +69,20 @@
           .catch(() => {
             answerBox.innerHTML = 'Sorry, something went wrong.';
           });
-      
+    });
+
+    // Handle speech recognition
+    recognition.onresult = event => {
+      const resultIndex = event.resultIndex;
+      const transcript = event.results[resultIndex][0].transcript;
+      textInput.value = transcript;
+      submitBtn.click(); // simulate click on submitBtn after voice input
+    };
+
+    
+    // Handle click on voice input button
+    voiceBtn.addEventListener('click', () => {
+      recognition.start();
     });
   </script>
 </body>
