@@ -4,57 +4,50 @@
     <meta charset="utf-8">
     <title>Simple ASP Website</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+  </head>
+  <body>
+    <h1>Ask a Question</h1>
+    <div id="answer"></div>
+    <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
+    <input type="text" id="text-input" placeholder="Type your question...">
+    <button id="submit-btn">Submit</button>
+    <div id="answer-box"></div>
   
+    <script>
+      // Speech recognition API
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
 
-  <style>
-    #voice-input-btn {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-  </style>
-</head>
-<body>
-  <h1>Ask a Question</h1>
-  <div id="answer"></div>
-  <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
-  <input type="text" id="text-input" placeholder="Type your question...">
-  <button id="submit-btn">Submit</button>
-  <div id="answer-box"></div>
-  
-  <script>
-    // Speech recognition API
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
+      // Get DOM elements
+      const answerDiv = document.querySelector('#answer');
+      const voiceBtn = document.getElementById('voice-input-btn');
+      const textInput = document.getElementById('text-input');
+      const submitBtn = document.getElementById('submit-btn');
+      const answerBox = document.getElementById('answer-box');
 
-    // Get DOM elements
-    const answerDiv = document.querySelector('#answer');
-    const voiceBtn = document.getElementById('voice-input-btn');
-    const textInput = document.getElementById('text-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const answerBox = document.getElementById('answer-box');
+      // Handle speech recognition
+      recognition.onresult = event => {
+        const resultIndex = event.resultIndex;
+        const transcript = event.results[resultIndex][0].transcript;
+        textInput.value = transcript;
+      };
 
-    
-    submitBtn.addEventListener('click', () => {
+      // Handle click on voice input button
+      voiceBtn.addEventListener('click', () => {
+        recognition.start();
+      });
+
+      submitBtn.addEventListener('click', () => {
         const question = textInput.value;
         if (question.trim() === '') {
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
-      
+
         // Call API to get answer
         const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
         fetch(url)
@@ -69,21 +62,7 @@
           .catch(() => {
             answerBox.innerHTML = 'Sorry, something went wrong.';
           });
-    });
-
-    // Handle speech recognition
-    recognition.onresult = event => {
-      const resultIndex = event.resultIndex;
-      const transcript = event.results[resultIndex][0].transcript;
-      textInput.value = transcript;
-      submitBtn.click(); // simulate click on submitBtn after voice input
-    };
-
-    
-    // Handle click on voice input button
-    voiceBtn.addEventListener('click', () => {
-      recognition.start();
-    });
-  </script>
-</body>
+      });
+    </script>
+  </body>
 </html>
