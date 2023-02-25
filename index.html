@@ -119,9 +119,6 @@
       console.log(all_predicates)
       
       
-      
-     
-      
       // Speech recognition API
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
@@ -148,7 +145,12 @@
         const resultIndex = event.resultIndex;
         const transcript = event.results[resultIndex][0].transcript;
         textInput.value = transcript;
-        getAnswer(transcript);
+        
+        var trim_script = transcript.split(" ");
+        trim_script = trim_script.filter(f => !stopwords.includes(f));
+        var queryQues = a.get(trim_script.join(" "), null, 0.5);
+        console.log(queryQues);
+        getAnswer(queryQues);
       };
 
       // Handle click on voice input button     
