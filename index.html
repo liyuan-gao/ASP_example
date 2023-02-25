@@ -47,6 +47,17 @@
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
+        
+        // Evaluate math expressions
+        if (/^[0-9+\-*/\s()]+$/.test(question)) {
+          try {
+            const answer = eval(question);
+            answerBox.innerHTML = answer;
+          } catch {
+            answerBox.innerHTML = 'Sorry, something went wrong.';
+          }
+          return;
+        }
 
         // Call API to get answer
         const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
