@@ -111,8 +111,6 @@ recognition.onresult = function (event) {
     
 }
 
-
-
 textInput.addEventListener("keypress", (event) => {
   if (event.keyCode === 13) {
     submitQuestion(textInput.value);
@@ -132,5 +130,24 @@ function getAnswer(question) {
   answerBox.style.display = "block"; // add this line
   answer.innerHTML = "The answer to your question is..."; // replace with API call to get the answer
 }
+        
+function getAnswer(question) {
+  processingMsg.classList.add("hidden");
+  answerBox.style.display = "block";
+  
+  // Make API call to retrieve answer
+  fetch('http://example.com/api/answer?q=' + encodeURIComponent(question))
+    .then(response => response.text())
+    .then(answerText => {
+      answer.innerHTML = answerText; // Update answer element with answer text
+      answer.classList.remove("hidden"); // Show answer element
+    })
+    .catch(error => {
+      console.error(error);
+      answer.innerHTML = "Sorry, an error occurred while retrieving the answer.";
+      answer.classList.remove("hidden");
+    });
+}
+
 
 
