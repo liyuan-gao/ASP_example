@@ -68,10 +68,12 @@
         getAnswer(transcript);
       };
 
-      // Handle click on voice input button
-      voiceBtn.addEventListener('click', () => {
+      // Handle click on voice input button     
+      function startSpeechRecognition() {
         recognition.start();
-      });
+      }
+      voiceBtn.addEventListener('click', startSpeechRecognition);
+
 
       function getAnswer(question) {
         // Call API to get answer
