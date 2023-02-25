@@ -183,9 +183,11 @@
                     'query': predicates[key1][key2],
                     'editor': editor
                 };
+          
+          console.log(data)
 
                 // Expected response : answer sets
-                $.post("http://wave.ttu.edu/ajax.php", data, function (response) {
+                $.post("http://wave.ttu.edu", data, function (response) {
                     console.log(response);
                     var html = document.createElement("html");
                     html.innerHTML = response;
