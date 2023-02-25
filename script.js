@@ -96,7 +96,7 @@ recognition.onresult = function (event) {
   var result = a.get(trim_script.join(" "), null, 0.5); //
   
   if (result) {
-        const axios = require('axios');
+        //const axios = require('axios');
         const query = result; // replace with your query
         axios.post('http://wave.ttu.edu/ajax.php', {
           query: query
@@ -125,11 +125,6 @@ function submitQuestion(question) {
   }, 1500);
 }
 
-function getAnswer(question) {
-  processingMsg.classList.add("hidden");
-  answerBox.style.display = "block"; // add this line
-  answer.innerHTML = "The answer to your question is..."; // replace with API call to get the answer
-}
         
 function getAnswer(question) {
   processingMsg.classList.add("hidden");
