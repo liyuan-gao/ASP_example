@@ -57,8 +57,10 @@
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
+        getAnswer(question);
+      });
 
-       // Handle speech recognition
+      // Handle speech recognition
       recognition.onresult = event => {
         const resultIndex = event.resultIndex;
         const transcript = event.results[resultIndex][0].transcript;
@@ -66,14 +68,12 @@
         getAnswer(transcript);
       };
 
-
-     // Handle click on voice input button
+      // Handle click on voice input button
       voiceBtn.addEventListener('click', () => {
         recognition.start();
       });
 
- 
-        function getAnswer(question) {
+      function getAnswer(question) {
         // Call API to get answer
         const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
         fetch(url)
@@ -81,14 +81,14 @@
           .then(data => {
             const answer = data.Answer || data.AbstractText || 'Sorry, I could not find an answer.';
             answerDiv.innerHTML = answer;
-          
-          console.log(answer)
-          
+            answerBox.innerHTML = answer;
+            console.log(answer);
           })
           .catch(() => {
             answerDiv.innerHTML = 'Sorry, something went wrong.';
+            answerBox.innerHTML = 'Sorry, something went wrong.';
           });
-}
+      }
 
     </script>
   </body>
