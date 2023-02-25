@@ -199,19 +199,17 @@
                         (pre_string + (answerarr.length==1?answerstring:(answerarr.splice(-1, 0, "and"),answerarr.join())))
                         : generaspeak(contentRan.answer[answerarr[0].toLowerCase().trim()]);
                     console.log(answerstring);
+                  
+                   const answer = answerstring || 'Sorry, I could not find an answer.';
+                  answerDiv.innerHTML = answer;
+                  answerBox.innerHTML = answer;
+                  console.log(answer);
                     
                 });
             }
         }
         
-            const answer = answerstring || 'Sorry, I could not find an answer.';
-            answerDiv.innerHTML = answer;
-            answerBox.innerHTML = answer;
-            console.log(answer);
-
  
-        
-      }
 
     </script>
   </body>
