@@ -137,7 +137,11 @@
           answerBox.innerHTML = 'Please ask a question.';
           return;
         }
-        getAnswer(question);
+        var trim_script = question.split(" ");
+        trim_script = trim_script.filter(f => !stopwords.includes(f));
+        var queryQues = a.get(trim_script.join(" "), null, 0.5); 
+        getAnswer(queryQues);
+        
       });
 
       // Handle speech recognition
@@ -161,20 +165,52 @@
 
 
       function getAnswer(question) {
-        // Call API to get answer
-        const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
-        fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            const answer = data.Answer || data.AbstractText || 'Sorry, I could not find an answer.';
+        
+        if (question!=null) {
+                var mainkey = question[0][1].replace('speak ','');
+                var answerarr = mainkey.split(' ');
+                var key1 = '';
+                answerarr.forEach(d => {
+                    key1 = (predicates[d] != undefined) ? d : key1;
+                });
+                //var key1 = answerarr.length>2? answerarr[1]:answerarr[0];
+                var key2 = mainkey;
+                console.log(key1 +'-'+ key2);
+                console.log(predicates[key1][key2]);
+                
+                var data = {
+                    'action': "getQuery",
+                    'query': predicates[key1][key2],
+                    'editor': editor
+                };
+
+                // Expected response : answer sets
+                $.post("http://wave.ttu.edu/ajax.php", data, function (response) {
+                    console.log(response);
+                    var html = document.createElement("html");
+                    html.innerHTML = response;
+                    // contentRan
+                    var answerstring = html.querySelector("p").textContent.replace(/X =/gm, "");
+                    var answerarr = answerstring.split("\n");
+                    answerarr.splice(-1,1);
+                    console.log(answerarr);
+                    var pre_string = "The answer to your question " + transcript + " is ";
+                    answerstring = contentRan.answer[answerarr[0].toLowerCase().trim()]==undefined?
+                        (pre_string + (answerarr.length==1?answerstring:(answerarr.splice(-1, 0, "and"),answerarr.join())))
+                        : generaspeak(contentRan.answer[answerarr[0].toLowerCase().trim()]);
+                    console.log(answerstring);
+                    
+                });
+            }
+        }
+        
+            const answer = answerstring || 'Sorry, I could not find an answer.';
             answerDiv.innerHTML = answer;
             answerBox.innerHTML = answer;
             console.log(answer);
-          })
-          .catch(() => {
-            answerDiv.innerHTML = 'Sorry, something went wrong.';
-            answerBox.innerHTML = 'Sorry, something went wrong.';
-          });
+
+ 
+        
       }
 
     </script>
