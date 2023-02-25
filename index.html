@@ -71,17 +71,22 @@
         });
 
         // Call API to get answer
-        const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
-        fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            const answer = data.Answer || data.AbstractText || 'Sorry, I could not find an answer.';
-            answerBox.innerHTML = answer;
-          })
-          .catch(() => {
-            answerBox.innerHTML = 'Sorry, something went wrong.';
-          });
-      });
+  const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
+  // Fetch data from the API
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Set a constant answer
+      const answer = "The answer is 2.";
+      // Display the answer in the answer box
+      const answerDiv = document.createElement('div');
+      answerDiv.innerHTML = answer;
+      answerBox.innerHTML = '';
+      answerBox.appendChild(answerDiv);
+    })
+    .catch(() => {
+      answerBox.innerHTML = 'Sorry, something went wrong.';
+    });
     </script>
   </body>
 </html>
