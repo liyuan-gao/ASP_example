@@ -189,7 +189,11 @@
 
                 // Expected response : answer sets
                 $.post("http://127.0.0.1/ajax.php?url=http://wave.ttu.edu/", data, function (response) {
+                  
+                  
                     console.log(response);
+                  
+                  
                     var html = document.createElement("html");
                     html.innerHTML = response;
                     // contentRan
