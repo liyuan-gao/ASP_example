@@ -9,110 +9,77 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="libs/fuzzyset.js"></script>
   
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f4f4f4;
-		}
-		.container {
-			margin: 0 auto;
-			max-width: 800px;
-			padding: 20px;
-			background-color: #fff;
-			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
-			border-radius: 10px;
-			margin-top: 50px;
-		}
-		h1 {
-			text-align: center;
-			margin-top: 0;
-			margin-bottom: 20px;
-		}
-		.answer {
-			margin-top: 20px;
-			padding: 10px;
-			background-color: #f7f7f7;
-			border-radius: 5px;
-			box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
-			line-height: 1.5;
-		}
-		#voice-input-btn {
-			background-color: #4CAF50;
-			border: none;
-			color: white;
-			padding: 15px;
-			text-align: center;
-			text-decoration: none;
-			display: inline-block;
-			font-size: 16px;
-			margin: 4px 2px;
-			cursor: pointer;
-			border-radius: 50%;
-			position: absolute;
-			top: 20px;
-			right: 120px;
-		}
-		#text-input {
-			padding: 15px;
-			width: 60%;
-			border-radius: 5px;
-			border: none;
-			margin-top: 20px;
-			margin-bottom: 20px;
-			font-size: 16px;
-		}
-	</style>
+
+  <style>
+    #voice-input-btn {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+  </style>
 </head>
 <body>
-	<div class="container">
-		<h1>Ask a Question</h1>
-		<div>
-			<button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
-			<input type="text" id="text-input" placeholder="Type your question...">
-			<button id="submit-btn">Submit</button>
-		</div>
-		<div class="answer-container">
-			<div id="answer"></div>
-		</div>
-	</div>
+  <h1>Ask a Question</h1>
+  <div id="answer"></div>
+  <button id="voice-input-btn"><i class="fa fa-microphone"></i></button>
+  <input type="text" id="text-input" placeholder="Type your question...">
+  
+  <script>
+    // Speech recognition API
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
 
-  // code for question answering functionality
-    <script>
-      window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      const userText = document.getElementById('userText');
-      const botText = document.getElementById('botText');
+    // Get DOM elements
+    const answerDiv = document.getElementById('answer');
+    const voiceBtn = document.getElementById('voice-input-btn');
+    const textInput = document.getElementById('text-input');
 
-      recognition.onresult = (event) => {
-        const speechToText = event.results[0][0].transcript;
-        userText.textContent = speechToText;
-        // You can call a backend API to get the answer and show it in the botText element
-        // Here's an example code to send a request to a backend API and display the response
-        fetch('https://api.example.com/answer?q=' + encodeURIComponent(speechToText))
-          .then(response => response.json())
-          .then(data => {
-            botText.textContent = data.answer;
-          })
-          .catch(error => {
-            botText.textContent = 'Sorry, something went wrong.';
-          });
-      };
+    // Handle speech recognition
+    recognition.onresult = event => {
+      const resultIndex = event.resultIndex;
+      const transcript = event.results[resultIndex][0].transcript;
+      textInput.value = transcript;
+    };
 
-      recognition.onerror = (event) => {
-        botText.textContent = 'Sorry, something went wrong.';
-      };
+    // Handle click on voice input button
+    voiceBtn.addEventListener('click', () => {
+      recognition.start();
+    });
 
-      document.addEventListener('keydown', (event) => {
-        if (event.key === ' ') {
-          recognition.start();
-        }
-      });
-    </script>
-  </body>
+    // Handle form submission
+    const form = document.createElement('form');
+    document.body.appendChild(form);
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const question = textInput.value;
+      if (question.trim() === '') {
+        answerDiv.innerHTML = 'Please ask a question.';
+        return;
+      }
+
+      // Call API to get answer
+      const url = `https://api.duckduckgo.com/?q=${question}&format=json`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const answer = data.Answer || data.AbstractText || 'Sorry, I could not find an answer.';
+          answerDiv.innerHTML = answer;
+        })
+        .catch(() => {
+          answerDiv.innerHTML = 'Sorry, something went wrong.';
+        });
+    });
+  </script>
+</body>
 </html>
-
-
 
