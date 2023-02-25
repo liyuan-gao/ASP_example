@@ -89,53 +89,29 @@ recognition.onstart = () => {
   console.log("Voice recognition activated");
 };
 
-recognition.onresult = (event) => {
-  const transcript = event.results[0][0].transcript;
-  textInput.value = transcript;
-  submitQuestion(transcript);
-  var result = a.get(transcript.join(" "), null, 0.5);
+
+recognition.onresult = function (event) {
+  var transcript = event.results[event.results.length - 1][0].transcript;
+  var trim_script = transcript.split(" ").filter(f => !stopwords.includes(f));
+  var result = a.get(trim_script.join(" "), null, 0.5); //
   
-   if (result!=null) {
-                var mainkey = result[0][1].replace('speak ','');
-                var answerarr = mainkey.split(' ');
-                var key1 = '';
-                answerarr.forEach(d => {
-                    key1 = (predicates[d] != undefined) ? d : key1;
-                });
-                //var key1 = answerarr.length>2? answerarr[1]:answerarr[0];
-                var key2 = mainkey;
-                console.log(key1 +'-'+ key2);
-                console.log(predicates[key1][key2]);
-                var utterThis = new SpeechSynthesisUtterance(key2);
-                synth.speak(utterThis);
+  if (result) {
+        const axios = require('axios');
+        const query = result; // replace with your query
+        axios.post('http://wave.ttu.edu/ajax.php', {
+          query: query
+        })
+          .then(response => {
+            console.log(response.data); // handle response data here
+          })
+          .catch(error => {
+            console.error(error); // handle error here
+          });
 
-                var data = {
-                    'action': "getQuery",
-                    'query': predicates[key1][key2],
-                    'editor': editor
-                };
+    
+}
 
-                // Expected response : answer sets
-                $.post("http://wave.ttu.edu/ajax.php", data, function (response) {
-                    console.log(response);
-                    var html = document.createElement("html");
-                    html.innerHTML = response;
-                    // contentRan
-                    var answerstring = html.querySelector("p").textContent.replace(/X =/gm, "");
-                    var answerarr = answerstring.split("\n");
-                    answerarr.splice(-1,1);
-                    console.log(answerarr);
-                    var pre_string = "The answer to your question " + transcript + " is ";
-                    answerstring = contentRan.answer[answerarr[0].toLowerCase().trim()]==undefined?
-                        (pre_string + (answerarr.length==1?answerstring:(answerarr.splice(-1, 0, "and"),answerarr.join())))
-                        : generaspeak(contentRan.answer[answerarr[0].toLowerCase().trim()]);
-                    console.log(answerstring);
-                    Speaking(answerstring);
-                });
-            }else{
-                Speaking(generaspeak(contentRan.unknowncommand));
-            }
-};
+
 
 textInput.addEventListener("keypress", (event) => {
   if (event.keyCode === 13) {
