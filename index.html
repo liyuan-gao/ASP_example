@@ -190,8 +190,9 @@
           
           //$.post("http://localhost/ajax.php", { url: "http://wave.ttu.edu/" , data:data}, function (response) {
                 // Expected response : answer sets
-                $.post("http://localhost/ajax/ajax.php", data, function (response) {
+                //$.post("http://localhost/ajax/ajax.php", data, function (response) {
                 //$.post("http://localhost/ajaxtest.php", function (response) {  
+                  $.post("https://cors-anywhere.herokuapp.com/http://wave.ttu.edu/", data, function (response) {
                   
                     console.log(response);
                   
