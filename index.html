@@ -202,6 +202,9 @@
           },
           success: function(response) {
             console.log(response);
+             const answer = response || 'Sorry, I could not find an answer.';
+             answerDiv.innerHTML = answer;
+             answerBox.innerHTML = answer;
           },
           error: function(xhr, status, error) {
             console.log("error: " + error);
