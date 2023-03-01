@@ -216,32 +216,32 @@
           
           //$.post("http://localhost/ajax.php", { url: "http://wave.ttu.edu/" , data:data}, function (response) {
                 // Expected response : answer sets
-                $.post("http://localhost/ajax/ajax.js",  function (response) {
+                //$.post("http://localhost/ajax/ajax.js",  function (response) {
                 //$.post("http://localhost/ajaxtest.php", function (response) {  
                  // $.post("https://cors-anywhere.herokuapp.com/http://wave.ttu.edu/", data, function (response) {
                   
-                    console.log(response);
+                   // console.log(response);
                   
                   
-                    var html = document.createElement("html");
-                    html.innerHTML = response;
+                   // var html = document.createElement("html");
+                   // html.innerHTML = response;
                     // contentRan
-                    var answerstring = html.querySelector("p").textContent.replace(/X =/gm, "");
-                    var answerarr = answerstring.split("\n");
-                    answerarr.splice(-1,1);
-                    console.log(answerarr);
-                    var pre_string = "The answer to your question " + transcript + " is ";
-                    answerstring = contentRan.answer[answerarr[0].toLowerCase().trim()]==undefined?
-                        (pre_string + (answerarr.length==1?answerstring:(answerarr.splice(-1, 0, "and"),answerarr.join())))
-                        : generaspeak(contentRan.answer[answerarr[0].toLowerCase().trim()]);
-                    console.log(answerstring);
+                   // var answerstring = html.querySelector("p").textContent.replace(/X =/gm, "");
+                  //  var answerarr = answerstring.split("\n");
+                  //  answerarr.splice(-1,1);
+                 //   console.log(answerarr);
+                 //   var pre_string = "The answer to your question " + transcript + " is ";
+                 //   answerstring = contentRan.answer[answerarr[0].toLowerCase().trim()]==undefined?
+                 //       (pre_string + (answerarr.length==1?answerstring:(answerarr.splice(-1, 0, "and"),answerarr.join())))
+                 //       : generaspeak(contentRan.answer[answerarr[0].toLowerCase().trim()]);
+                //    console.log(answerstring);
                   
-                   const answer = answerstring || 'Sorry, I could not find an answer.';
-                  answerDiv.innerHTML = answer;
-                  answerBox.innerHTML = answer;
-                  console.log(answer);
+                //   const answer = answerstring || 'Sorry, I could not find an answer.';
+               //   answerDiv.innerHTML = answer;
+               //   answerBox.innerHTML = answer;
+               //   console.log(answer);
                     
-                });
+               // });
             }
         }
         
