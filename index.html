@@ -189,26 +189,25 @@
           
           
           
-          var corsAnywhereUrl = "https://cors-anywhere.herokuapp.com/";
-          var ajaxUrl = "http://wave.ttu.edu/ajax.php"; // Replace with your actual AJAX URL
-
           $.ajax({
-            url: corsAnywhereUrl + ajaxUrl,
-            type: "POST",
-            data: {
-              action: "getQuery",
-              query: predicates[key1][key2],
-              editor: editor,
-            },
-            success: function(response) {
-              console.log(response);
-              // Handle the response here
-            },
-            error: function(xhr, status, error) {
-              console.log(status + ": " + error);
-              // Handle the error here
-            }
-          });
+          url: "https://cors-anywhere.herokuapp.com/http://wave.ttu.edu/ajax.php",
+          type: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          data: {
+            action: "getQuery",
+            query: predicates[key1][key2],
+            editor: editor
+          },
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            console.log("error: " + error);
+          }
+        });
+
 
 
           
